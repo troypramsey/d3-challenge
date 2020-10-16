@@ -1,17 +1,27 @@
 // Declaring container sizing variables
 
-const width = 800, height = 500;
+let width = 800
+let height = 500;
 
-const chartWidth = width - (width*.2), chartHeight = height - (height*.2)
+let margin = {
+    left: 20,
+    top: 20,
+    right: 20,
+    bottom: 20
+}
+
+let chartWidth = width - margin.left - margin.right 
+let chartHeight = height - margin.top - margin.bottom
 
 // Initial SVG properties
 
 let svg = d3.select('body')
     .append('svg')
     .attr('width', width)
-    .attr('heigh', height)
+    .attr('height', height)
 
 let chartGroup = svg.append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`)
     
 
 // Import data
@@ -44,9 +54,10 @@ d3.csv('assets/data/data.csv').then(data => {
     .join("circle")
     .attr("cx", d => xScale(d.poverty))
     .attr("cy", d => yScale(d.healthcare))
-    .attr("r", "15")
+    .attr("r", "5")
     .attr("fill", "pink")
     .attr("opacity", 0.5)
     .attr("stroke", "black")
     .attr("stroke-width", 1);
+
 })
