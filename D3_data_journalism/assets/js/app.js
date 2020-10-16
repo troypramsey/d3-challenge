@@ -28,9 +28,14 @@ let chartGroup = svg.append('g')
 
 d3.csv('assets/data/data.csv').then(data => {
 
+    data.forEach(d => {
+        d.poverty = +d.poverty
+        d.healthcare = +d.healthcare
+    })
+
     // Setting axes scales and values
     let xScale = d3.scaleLinear()
-        .domain([d3.min(data, d=> d.poverty), d3.max(data, d=> d.poverty)])
+        .domain([d3.min(data, d=>d.poverty), d3.max(data, d=>d.poverty)])
         .range([0, chartWidth])
 
     let yScale = d3.scaleLinear()
@@ -49,7 +54,7 @@ d3.csv('assets/data/data.csv').then(data => {
       .call(yAxis);
 
     // Adding plots to chart
-    var circlesGroup = chartGroup.selectAll("circle")
+    let circlesGroup = chartGroup.selectAll("circle")
     .data(data)
     .join("circle")
     .attr("cx", d => xScale(d.poverty))
