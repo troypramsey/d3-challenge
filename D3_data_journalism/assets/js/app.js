@@ -26,21 +26,18 @@ let chartGroup = svg.append('g')
 
 // Import data
 
-d3.csv('assets/data/data.csv').then(data => {
-
-    data.forEach(d => {
-        d.poverty = +d.poverty
-        d.healthcare = +d.healthcare
-    })
+d3.csv('assets/data/data.csv', d3.autoType).then(data => {
 
     // Setting axes scales and values
     let xScale = d3.scaleLinear()
-        .domain([d3.min(data, d=>d.poverty), d3.max(data, d=>d.poverty)])
+        .domain(d3.extent(data, d=>d.poverty))
         .range([0, chartWidth])
+        .nice()
 
     let yScale = d3.scaleLinear()
-        .domain([d3.min(data, d=>d.healthcare), d3.max(data, d=>d.healthcare)])
+        .domain([0, d3.max(data, d=>d.healthcare)])
         .range([chartHeight, 0])
+        .nice()
 
     let xAxis = d3.axisBottom(xScale)
     let yAxis = d3.axisLeft(yScale)
@@ -55,14 +52,25 @@ d3.csv('assets/data/data.csv').then(data => {
 
     // Adding plots to chart
     let circlesGroup = chartGroup.selectAll("circle")
-    .data(data)
-    .join("circle")
-    .attr("cx", d => xScale(d.poverty))
-    .attr("cy", d => yScale(d.healthcare))
-    .attr("r", "5")
-    .attr("fill", "pink")
-    .attr("opacity", 0.5)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1);
+        .data(data)
+        .join("circle")
+        .attr("cx", d => xScale(d.poverty))
+        .attr("cy", d => yScale(d.healthcare))
+        .attr("r", "15")
+        .attr("fill", "grey")
+        .attr("opacity", 0.5)
+
+    let textGroup = svg.selectAll(null)
+        .data(data)
+        .join('text')
+        .text(d=>d.abbr)
+        .attr('x', d=>xScale(d.poverty)+20)
+        .attr('y', d=>yScale(d.healthcare)+25)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'sans-serif')
+        .attr('fill', '#fafafa')
+        .attr('font-size', '10px')
+    
+    
 
 })
