@@ -1,7 +1,7 @@
 // Declaring container sizing variables
 
-let width = 800
-let height = 500;
+let width = 1000
+let height = 800;
 
 let margin = {
     left: 20,
@@ -35,7 +35,7 @@ d3.csv('assets/data/data.csv', d3.autoType).then(data => {
         .nice()
 
     let yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d=>d.healthcare)])
+        .domain([d3.min(data, d=>d.healthcare), d3.max(data, d=>d.healthcare)])
         .range([chartHeight, 0])
         .nice()
 
